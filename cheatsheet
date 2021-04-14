@@ -20,7 +20,7 @@ kubadm reset
 sudo rm -rf .kube/ /etc/kubernetes/ /var/lib/etcd/ /var/lib/kubelet/ /usr/libexec/kubernetes/
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --control-plane-endpoint=master.fios-router.home#
 # https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-curl https://docs.projectcalico.org/manifests/calico.yaml -
+curl https://docs.projectcalico.org/manifests/calico.yaml - O
 kubectl apply -f calico.yaml
 kubeadm join master.fios-router.home:6443 --token jjltvd.g9ej2qg6qjp618mb --discovery-token-ca-cert-hash sha256:ba11b3cc9142bdd9b02203b0fcc1efe101228e0c8a8909ceee65f10c4814a8d6
 
