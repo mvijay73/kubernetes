@@ -27,3 +27,54 @@ kubeadm join master.fios-router.home:6443 --token jjltvd.g9ej2qg6qjp618mb --disc
 WAIT....
 
 kubectl apply nodes.yml
+
+mvijay@master:~/learnk8s/eks-alb$ kubectl expose deployment hello-deploy --type=NodePort --name=hello-svc
+Error from server (NotFound): deployments.apps "hello-deploy" not found
+mvijay@master:~/learnk8s/eks-alb$ vi hello-deploy.yml 
+mvijay@master:~/learnk8s/eks-alb$ kubectl expose deployment hello-app --type=NodePort --name=hello-svc
+Error from server (AlreadyExists): services "hello-svc" already exists
+mvijay@master:~/learnk8s/eks-alb$ kubectl delete svc hello-svc
+service "hello-svc" deleted
+mvijay@master:~/learnk8s/eks-alb$ kubectl expose deployment hello-app --type=NodePort --name=hello-svc
+service/hello-svc exposed
+mvijay@master:~/learnk8s/eks-alb$ kubectl get svc hello-svc
+NAME        TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+hello-svc   NodePort   10.100.96.231   <none>        3000:32164/TCP   19s
+mvijay@master:~/learnk8s/eks-alb$ kubectl describe svc hello-svc
+Name:                     hello-svc
+Namespace:                default
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=hellojs
+Type:                     NodePort
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.100.96.231
+IPs:                      10.100.96.231
+Port:                     <unset>  3000/TCP
+TargetPort:               3000/TCP
+NodePort:                 <unset>  32164/TCP
+Endpoints:                192.168.189.69:3000,192.168.189.70:3000
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+mvijay@master:~/learnk8s/eks-alb$ kubectl cluster-info
+Kubernetes control plane is running at https://master.fios-router.home:6443
+CoreDNS is running at https://master.fios-router.home:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+mvijay@master:~/learnk8s/eks-alb$ curl http://master.fios-router.home
+curl: (7) Failed to connect to master.fios-router.home port 80: Connection refused
+mvijay@master:~/learnk8s/eks-alb$ curl http://master.fios-router.home:32164/
+Hello Worldmvijay@master:~/learnk8s/eks-alb$ 
+
+
+
+
+
+
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+# On first install only
+kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+
