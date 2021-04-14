@@ -1,0 +1,14 @@
+{
+  "name": "hellojs",
+  "version": "1.0.0",
+  "description": "Sample JS project for EKS",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "author": "Vijay M",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
