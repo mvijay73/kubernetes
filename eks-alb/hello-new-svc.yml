@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: hello-gw-svc
+  name: hellojs
   labels:
     app: hellojs
-    service: hellojs-svc
+    service: hellojs
 spec:
   ports:
     - port: 3000
       name: http
   selector:
     app: hellojs
+---
