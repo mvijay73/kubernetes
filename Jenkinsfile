@@ -1,36 +1,17 @@
-pipeline {
-
-  agent any
-
-  stages {
-      stage("Build image") {
-            steps {
-                script {
-                    myapp = docker.build("mvijay/hellojs_app:${env.BUILD_ID}")
-                }
-            }
-        }
+node("docker") {
+    docker.withRegistry('hub.docker.dom', 'mvijay') {
     
-      stage("Push image") {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                            myapp.push("latest")
-                            myapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }
-
+        git url: "https://github.com/mvijay73/kubernetes.git", credentialsId: 'mvijay73'
     
-    stage('Deploy App') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "mykubeconfig")
-        }
-      }
+        sh "git rev-parse HEAD > .git/commit-id"
+        def commit_id = readFile('.git/commit-id').trim()
+        println commit_id
+    
+        stage "build"
+        def app = docker.build "your-project-name"
+    
+        stage "publish"
+        app.push 'master'
+        app.push "${commit_id}"
     }
-
-  }
-
 }
