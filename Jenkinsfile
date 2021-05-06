@@ -3,13 +3,6 @@ pipeline {
   agent any
 
   stages {
-
-    stage('Checkout Source') {
-      steps {
-        git url:'https://github.com/mvijay73/kubernetes.git', branch:'main'
-      }
-    }
-    
       stage("Build image") {
             steps {
                 script {
