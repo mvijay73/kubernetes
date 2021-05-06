@@ -5,8 +5,8 @@ const app = express();
 
 const server = http.createServer(app);
 
-app.get('/', function(req,res){
-        res.send("Hello World");
+app.get('/api', function(req,res){
+        res.send("Welcome to API version 1.0");
 });
 
 server.listen(3000, function(){

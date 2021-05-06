@@ -25,7 +25,7 @@ spec:
   http:
   - match:
     - uri:
-        exact: /
+        exact: /api
     route:
     - destination:
         host: hellojs
