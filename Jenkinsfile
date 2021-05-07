@@ -12,7 +12,7 @@ node {
         sh 'ls -la'
         sh 'cd hellojs'
         sh 'ls -la'
-        app = docker.build("mvijay/hellojs_app")
+        app = docker.build("mvijay/hellojs_app hellojs/.")
     }
 
     stage('Test image') {
