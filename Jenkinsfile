@@ -11,6 +11,7 @@ node {
     stage('Build image') {
         sh 'ls -la'
         sh 'cd hellojs'
+        sh 'ls -la'
         app = docker.build("mvijay/hellojs_app")
     }
 
