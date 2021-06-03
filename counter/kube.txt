@@ -1,0 +1,129 @@
+  465  git clone https://github.com/mvijay73/kubernetes.git
+  467  cd kubernetes/
+  689  sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+  691  sudo apt install kubeadm kubelet kubectl kubernetes-cni
+  696  sudo kubeadm init --pod-network-cidr=172.20.0.0/16 
+  697  kubectl get nodes
+  700  mkdir .kube
+  701  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  702  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  704  kubectl apply -f ./calico.yaml 
+  705  kubectl get nodes
+  707  kubectl get pods --all-namespaces
+  722  apt search kubelet
+  723  apt search kubeadm
+  744  kubectl get nodes
+  805  kubectl delete frontend/counter-fend.yaml 
+  807  kubectl delete ./frontend/counter-fend.yaml 
+  808  kubectl delete -f ./frontend/counter-fend.yaml 
+  809  kubectl delete -f ./backend/counter-bend.yaml 
+  810  kubectl apply -f ./backend/counter-bend.yaml 
+  811  kubectl apply -f ./frontend/counter-fend.yaml 
+  812  kubectl get pods
+  813  kubectl port-forward $(kubectl get pods -l=app="do-visit-counter-frontend" -o name) 8000:8000
+  814  kubectl port-forward $(kubectl get pods -l=app="counter-fend" -o name) 8000:8000
+  846  kubectl apply -f counter-fend.yaml 
+  848  kubectl apply -f counter-bend.yaml 
+  849  kubectl get pods
+  851  kubectl get pods
+  852  kubectl apply -f counter-bend.yaml 
+  853  kubectl get pods
+  854  kubectl delete pod counter-bend-84b8b4db8b-rb2q5
+  855  kubectl get pods
+  856  kubectl port-forward $(kubectl get pods -l=app="do-visit-counter-frontend" -o name) 8000:8000
+  857  kubectl port-forward $(kubectl get pods -l=app="counter-fend" -o name) 8000:8000
+  858  kubectl get pods -l=app-"counter-fend -o name
+  860  kubectl get pods -l=app-"counter-fend -o name"
+  861  kubectl get pods -l=app="counter-fend" -o name
+  870  kubectl create -f jaegertracing.io_jaegers_crd.yaml 
+  871  kubectl -f service_account.yaml 
+  872  kubectl create -f service_account.yaml 
+  873  kubectl create -f role.yaml 
+  874  kubectl create -f role_binding.yaml 
+  875  kubectl apply -f - <<EOF
+  881  kubectl get pods
+  882  kubectl get pods --all-namespaces
+  883  kubectl apply -f - <<EOF
+  889  kubectl get pods --all-namespaces
+  890  kubectl get pods
+  891  kubectl get pods -n jaeger
+  892  kubectl create -f jaegertracing.io_jaegers_crd.yaml 
+  894  wget kubectl apply -f - <<EOF
+  899  wget kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/master/deploy/operator.yaml
+  902  kubectl create -f operator.yaml 
+  903  wget kubectl apply -f - <<EOF
+  908  kubectl apply -f - <<EOF
+  914  kubectl get pods
+  915  kubectl port-forward $(kubectl get pods -l=app="jaeger" -o name) 16686:16686
+  916  kubectl get pods -l=app="jaeger" -o name
+  917  kubectl delete pod pod/simplest-5cf4cc958-fjw7s
+  918  kubectl delete pod simplest-5cf4cc958-fjw7s
+  919  kubectl get pods -l=app="jaeger" -o name
+  920  kubectl get pods
+  921  kubectl delete pod simplest-5cf4cc958-fjw7s
+  922  kubectl get pods
+  923  kubectl port-forward $(kubectl get pods -l=app="jaeger" -o name) 16686:16686
+  924  kubectl delete pods --all
+  925  kubectl get pods
+  926  kubectl get svc
+  927  kubectl get deploy
+  928  kubectl delete deploy sample simplest
+  929  kubectl get svc
+  930  kubectl get pods
+  931  kubectl get svc
+  932  kubectl delete svc sample-agent sample-collector sample-collector-headless sample-query
+  933  kubectl get svc
+  934  kubectl delete svc simplest-agent simplest-collector simplest-collector-headless simplest-query
+  935  kubectl get svc
+  936  kubectl get pods
+  937  kubectl apply -f - <<EOF
+  943  kubectl get pods
+  944  kubectl apply -f - <<EOF
+  950  kubectl get pods
+  951  kubectl port-forward $(kubectl get pods -l=app="jaeger" -o name) 16686:16686
+  952  kubectl get pods
+  978  kubectl get pods
+  984  kubectl get pods --all-namespaces
+  998  kubectl get nodes
+ 1016  kubectl port-forward $(kubectl get pods -l=app="jaeger" -o name) 16686:16686
+ 1017  kubectl port-forward $(kubectl get pods -l=app="counter" -o name) 16686:16686
+ 1018  kubectl get pods
+ 1019  kubectl get pods -l
+ 1020  kubectl get pods -l=app
+ 1021  kubectl get pods -l=app=counter -o name
+ 1022  kubectl get pods -l=app  name
+ 1023  kubectl get pods -l  name
+ 1024  kubectl get pods -l  -o name
+ 1025  kubectl get pods -l  name
+ 1026  kubectl get pods 
+ 1028  kubectl get svc
+ 1029  kubectl port-forward $(kubectl get pods -l=app="jaeger" -o name) 16686:16686
+ 1030  kubectl get pods
+ 1031  kubectl port-forward $(kubectl get pods -wide
+ 1032  kubectl get pods -wide
+ 1033  kubectl get pods --wide
+ 1034  kubectl get pods -l
+ 1035  kubectl get pods -l=app
+ 1036  kubectl get pods -l=app=sample
+ 1037  kubectl get pods -l=app=sample -o name
+ 1038  kubectl get pods -l=app=jaeger -o name
+ 1039  kubectl get deploy
+ 1040  kubectl delete deploy sample simplest
+ 1041  kubectl get pods
+ 1042  kubectl get svc
+ 1043  kubectl get pods
+ 1044  kubectl get pods -l=app=jaeger -o name
+ 1045  kubectl port-forward $(kubectl get pods -l=app="jaeger" -o name) 16686:16686
+ 1047  kubectl port-forward $(kubectl get pods -l=app="jaeger" -o name) 16686:16686
+ 1054  kubectl get pods
+ 1059  kubectl port-forward $(kubectl get pods -l=app="do-visit-counter-frontend" -o name) 8000:8000
+ 1060  kubectl port-forward $(kubectl get pods -l=app="counter-fend" -o name) 8000:8000
+ 1072  kubectl get nodes
+ 1074  kubectl port-forward $(kubectl get pods -l=app="counter-fend" -o name) 8000:8000
+ 1162  kubectl get pods
+ 1164  history | grep kubectl
+ 1167  kubectl get svc
+ 1175  kubeadm --help
+ 1176  kubeadm upgrade
+ 1177  history | grep kube
+ 1178  history | grep kube > kube.txt

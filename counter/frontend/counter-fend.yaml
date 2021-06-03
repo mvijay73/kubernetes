@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-fend
+  labels:
+    name: counter-fend
+  annotations:
+    "sidecar.jaegertracing.io/inject": "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-fend
+  template:
+    metadata:
+      labels:
+        app: counter-fend
+    spec:
+      containers:
+        - name: counter-fend
+          image: mvijay/counter-fend
+          imagePullPolicy: Always
+          env:
+            - name: COUNTER_ENDPOINT
+              value: "http://counter-bend.default.svc.cluster.local:5000"
+          ports:
+            - name: frontend-port
+              containerPort: 8000
+              protocol: TCP

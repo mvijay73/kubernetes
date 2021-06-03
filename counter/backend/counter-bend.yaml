@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-bend
+  labels:
+    name: counter-bend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: counter-bend
+  template:
+    metadata:
+      labels:
+        app: counter-bend
+    spec:
+      containers:
+        - name: counter-bend
+          image: mvijay/counter-bend
+          imagePullPolicy: Always
+          ports:
+            - name: backend-port
+              containerPort: 5000
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: counter-bend
+spec:
+    selector:
+        app: counter-bend
+    ports:
+        - protocol: TCP
+          port: 5000
+          targetPort: 5000
