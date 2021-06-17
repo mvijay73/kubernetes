@@ -1,0 +1,145 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: moodle
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: moodle
+    argocd.argoproj.io/instance: moodle
+    helm.sh/chart: moodle-11.0.8
+  name: moodle
+  namespace: hemocare
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: moodle
+      app.kubernetes.io/name: moodle
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: '9117'
+        prometheus.io/scrape: 'true'
+      labels:
+        app.kubernetes.io/instance: moodle
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: moodle
+        helm.sh/chart: moodle-11.0.8
+    spec:
+      affinity:
+        nodeAffinity: null
+        podAffinity: null
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: moodle
+                    app.kubernetes.io/name: moodle
+                namespaces:
+                  - hemocare
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      containers:
+        - env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" .Values.image.debug | quote }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ ternary "yes" "no" .Values.allowEmptyPassword | quote }}
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.http | quote }}
+            - name: APACHE_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
+            - name: MOODLE_DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-host
+                  name: moodle-secret
+            - name: MOODLE_DATABASE_PORT_NUMBER
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-port
+                  name: moodle-secret
+            - name: MOODLE_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-dbname
+                  name: moodle-secret
+            - name: MOODLE_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-user
+                  name: moodle-secret
+            - name: MOODLE_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-password
+                  name: moodle-secret
+            - name: MOODLE_SKIP_BOOTSTRAP
+              value: {{ ternary "yes" "no" .Values.moodleSkipInstall | quote }}
+            - name: MOODLE_USERNAME
+              value: {{ .Values.moodleUsername | quote }}
+            - name: MOODLE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: moodle-password
+                  name: moodle-secret
+            - name: MOODLE_SITE_NAME
+              value: {{ .Values.moodleSiteName| quote }}
+            - name: MOODLE_EMAIL
+              value: {{ .Values.moodleEmail | quote }}
+            - name: MOODLE_DATABASE_TYPE
+              value: mysqli
+          envFrom: null
+          image: {{ .Values.image.repository | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /login/index.php
+              port: http
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: moodle
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 8443
+              name: https
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /login/index.php
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 300m
+              memory: 512Mi
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - mountPath: /bitnami/moodle
+              name: moodle-data
+              subPath: moodle
+            - mountPath: /bitnami/moodledata
+              name: moodle-data
+              subPath: moodledata
+      hostAliases:
+        - hostnames:
+            - status.localhost
+          ip: 127.0.0.1
+      initContainers: null
+      securityContext:
+        fsGroup: 0
+      volumes:
+        - name: moodle-data
+          persistentVolumeClaim:
+            claimName: moodle-moodle
